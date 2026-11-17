@@ -64,7 +64,17 @@ foreach ($p in $pages) {
     }
     $n++
   }
-  Write-Host "page $p : $n rows"
+  Write-Host "page $p : $n rows (html length $($html.Length))"
+}
+
+# Safety guard: never overwrite data.js with an empty or shrunken list.
+$outFile = Join-Path $PSScriptRoot 'data.js'
+$oldCount = 0
+if (Test-Path $outFile) {
+  $oldCount = ([regex]::Matches([IO.File]::ReadAllText($outFile), '"id":')).Count
+}
+if ($all.Count -lt 100 -or $all.Count -lt $oldCount) {
+  throw "Fetched $($all.Count) meetings but data.js has $oldCount. The site may be blocking this network. data.js was NOT changed."
 }
 
 $all  = $all | Sort-Object date -Descending
