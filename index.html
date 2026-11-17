@@ -267,7 +267,7 @@ mark{background:var(--mark);color:inherit;padding:0 1px;border-radius:2px}
       h += '<div class="row"><span class="big">官方網站尚未公告</span></div>';
       if (last) h += '<p>最近一次已公告的會議：'+esc(last.rocDate)+'（'+weekday(last.date)+'）'+esc(nameOf(last))+'。'+
         (last.place ? '地點：'+esc(last.place)+'。' : '')+'</p>'+casesHtml(last, [], false);
-      h += '<p>官方網站公告新議程後，請再執行一次 fetch.ps1。</p>';
+      h += '<p>官方網站公告新議程後，本頁會在下一次資料更新時顯示。</p>';
     }
     $('next').innerHTML = h;
   }
