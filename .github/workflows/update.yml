@@ -1,0 +1,49 @@
+name: Update meeting minutes
+
+on:
+  schedule:
+    - cron: '0 0 * * *'    # 每天 08:00（臺北時間）
+    - cron: '0 10 * * *'   # 每天 18:00（臺北時間）
+  workflow_dispatch:        # 可在 Actions 頁面手動執行
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-minutes
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      TZ: Asia/Taipei
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python packages
+        run: pip install pypdf cryptography
+
+      - name: Fetch meeting list
+        shell: pwsh
+        run: ./fetch.ps1
+
+      - name: Read new PDFs
+        run: python extract.py
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data.js details.js text
+          if git diff --cached --quiet -- details.js text; then
+            echo "No new agenda or minutes. Nothing to commit."
+          else
+            git commit -m "Update meeting data $(date +%Y-%m-%d)"
+            git push
+          fi
