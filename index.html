@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>臺北市都更審議會紀錄</title>
+<style>
+:root{
+  --bg:#f6f5f1; --card:#ffffff; --ink:#1f2a2e; --muted:#667378; --line:#dcdfdc;
+  --accent:#0f6b5c; --accent-soft:#e2f1ed; --panel:#8a5a12; --panel-soft:#f7ecd8; --mark:#ffe58a;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#14191b; --card:#1d2427; --ink:#e6ebea; --muted:#9aa6a8; --line:#313b3e;
+    --accent:#5cc7b2; --accent-soft:#1c3a35; --panel:#e0b566; --panel-soft:#3a2f1a; --mark:#6b5a12; }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif;line-height:1.6}
+.wrap{max-width:1000px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:1.5rem;margin:0 0 4px}
+.sub{color:var(--muted);font-size:.875rem;margin:0 0 20px}
+.sub a{color:var(--accent)}
+.next{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--accent);
+  border-radius:10px;padding:16px 20px;margin-bottom:20px}
+.next h2{font-size:.875rem;color:var(--muted);margin:0 0 6px;font-weight:600;letter-spacing:.05em}
+.next .big{font-size:1.5rem;font-weight:700}
+.next .row{display:flex;flex-wrap:wrap;gap:8px 24px;align-items:baseline}
+.next p{margin:6px 0 0;color:var(--muted);font-size:.9rem}
+.tools{position:sticky;top:0;background:var(--bg);padding:10px 0;z-index:5;
+  display:flex;flex-wrap:wrap;gap:8px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.tools input[type=search]{flex:1 1 260px;min-width:0;padding:10px 12px;font-size:1rem;
+  border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+.tools select,.btn{padding:9px 12px;font-size:.9rem;border:1px solid var(--line);border-radius:8px;
+  background:var(--card);color:var(--ink);cursor:pointer;font-family:inherit}
+.btn:hover{border-color:var(--accent)}
+@media (max-width:640px){
+  .wrap{padding:16px 16px 48px}
+  h1{font-size:1.2rem}
+  .tools{position:static;display:grid;grid-template-columns:1fr 1fr;padding-top:0}
+  .tools input[type=search]{grid-column:1 / -1}
+  .tools select,.tools .btn{width:100%;min-width:0}
+  .next .big{font-size:1.2rem}
+  .small{margin-left:0}
+  .srow{flex-direction:column;gap:0}
+}
+.count{color:var(--muted);font-size:.875rem;margin:0 0 10px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:10px}
+.head{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.date{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.9rem;min-width:7.5em}
+.name{font-weight:700}
+.badge{font-size:.75rem;padding:1px 8px;border-radius:99px;background:var(--accent-soft);color:var(--accent)}
+.badge.panel{background:var(--panel-soft);color:var(--panel)}
+.badge.wait{background:transparent;border:1px dashed var(--line);color:var(--muted)}
+.links{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:6px;font-size:.9rem}
+.links a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+.links a:hover{border-bottom-color:var(--accent)}
+.links .k{color:var(--muted)}
+.cases{margin:8px 0 0;padding-left:1.4em;font-size:.9rem}
+.cases li{margin-bottom:4px}
+.kind{font-size:.75rem;border:1px solid var(--line);border-radius:4px;padding:0 5px;margin-right:6px;color:var(--muted)}
+.cases details{margin:2px 0 6px}
+.cases summary{cursor:pointer;color:var(--accent);font-size:.85rem}
+.cases details p{margin:4px 0 0;padding:8px 10px;background:var(--bg);border-radius:6px;overflow-wrap:anywhere}
+.out{font-size:.75rem;font-weight:700;padding:1px 8px;border-radius:99px;border:1px solid var(--line);white-space:nowrap}
+.out.ok,.topic.ok{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.out.hold,.topic.hold{background:var(--panel-soft);color:var(--panel);border-color:transparent}
+.out.no,.topic.no{background:#fbe3e0;color:#a3271b;border-color:transparent}
+.sum{margin:6px 0;padding:8px 10px;border-left:3px solid var(--accent);background:var(--bg);border-radius:0 6px 6px 0}
+.srow{display:flex;gap:10px;margin:3px 0;overflow-wrap:anywhere}
+.srow>b{flex:0 0 2.4em;color:var(--muted);font-weight:600;font-size:.8rem;padding-top:2px}
+.srow>span{flex:1;min-width:0}
+.topic{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:0 7px;margin:0 5px 4px 0;font-size:.82rem}
+.kws{margin:3px 0 2px}
+.kw{display:inline-block;cursor:pointer;font-size:.78rem;border:1px solid var(--accent);color:var(--accent);
+  border-radius:99px;padding:0 8px;margin:0 5px 3px 0;background:transparent}
+.kw:hover{background:var(--accent-soft)}
+.fnote{font-size:.82rem;color:var(--muted);margin:2px 0 4px}
+.hist{cursor:pointer;color:var(--accent);font-size:.82rem;white-space:nowrap}
+.hist.me{color:var(--ink);font-weight:700}
+.up{color:#b3261e;font-size:.8rem}.down{color:#1a7f37;font-size:.8rem}
+.snip{margin:6px 0 0;font-size:.85rem;color:var(--muted);overflow-wrap:anywhere}
+.mine{margin-top:8px;font-size:.9rem}
+.tag{display:inline-block;background:var(--accent-soft);color:var(--accent);border-radius:6px;
+  padding:0 8px;margin:0 6px 4px 0;cursor:pointer}
+.note{white-space:pre-wrap;color:var(--ink);margin:4px 0 0}
+.edit{display:none;margin-top:8px;gap:6px;flex-direction:column}
+.item.editing .edit{display:flex}
+.edit input,.edit textarea{width:100%;padding:8px 10px;font:inherit;border:1px solid var(--line);
+  border-radius:8px;background:var(--bg);color:var(--ink)}
+.edit textarea{min-height:90px;resize:vertical}
+.edit label{font-size:.8rem;color:var(--muted)}
+.small{font-size:.8rem;padding:4px 10px;margin-left:auto}
+mark{background:var(--mark);color:inherit;padding:0 1px;border-radius:2px}
+.more{display:block;margin:16px auto;padding:10px 24px}
+.empty{text-align:center;color:var(--muted);padding:40px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>臺北市都市更新及爭議處理審議會　會議紀錄</h1>
+  <p class="sub">資料來源：<a href="https://uro.gov.taipei/cp.aspx?n=BB5DBFD036524472" target="_blank" rel="noopener">臺北市都市更新處　審議會議程及紀錄</a>。　資料更新時間：<span id="fetched">－</span></p>
+
+  <section class="next" id="next"></section>
+
+  <div class="tools">
+    <input type="search" id="q" placeholder="輸入關鍵字。多個關鍵字用空白分開。" autocomplete="off">
+    <select id="type" aria-label="會議類型">
+      <option value="">全部類型</option><option value="board">審議會</option><option value="panel">專案小組</option>
+    </select>
+    <select id="year" aria-label="年度"><option value="">全部年度</option></select>
+    <select id="state" aria-label="紀錄狀態">
+      <option value="">全部狀態</option><option value="has">已有會議紀錄</option>
+      <option value="none">尚無會議紀錄</option><option value="mine">有我的標籤或備註</option>
+    </select>
+    <select id="kwsel" aria-label="專有名詞"><option value="">全部專有名詞</option></select>
+    <select id="outsel" aria-label="審議結果"><option value="">全部審議結果</option></select>
+    <button class="btn" id="export" title="把標籤與備註存成檔案">匯出備註</button>
+    <button class="btn" id="import" title="從檔案讀回標籤與備註">匯入備註</button>
+    <input type="file" id="file" accept=".json" hidden>
+  </div>
+
+  <p class="count"><label><input type="checkbox" id="ft"> 同時搜尋會議紀錄 PDF 全文</label>　<span id="ftmsg"></span></p>
+  <p class="count" id="count"></p>
+  <div id="list"></div>
+  <button class="btn more" id="more" hidden>顯示更多</button>
+</div>
+
+<script src="data.js"></script>
+<script src="details.js"></script>
+<script>
+(function(){
+  var DATA = window.MEETINGS || [];
+  var KEY = 'tpe-uro-notes-v1';
+  var PAGE = 60, shown = PAGE;
+  var notes = {};
+  try { notes = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e){ notes = {}; }
+  function saveNotes(){ try { localStorage.setItem(KEY, JSON.stringify(notes)); } catch(e){} }
+
+  var $ = function(id){ return document.getElementById(id); };
+  var TYPE = { board:'審議會', panel:'專案小組' };
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function tidy(s){ return String(s||'').replace(/[（(]\s*pdf[^)）]*[)）]/ig,'').trim(); }
+  function nameOf(m){ return '第 ' + (parseInt(m.no,10) || m.no || '？') + ' 次' + (m.type==='panel' ? '專案小組會議' : '審議會'); }
+  function localToday(){ var d=new Date(); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+  var WEEK = ['日','一','二','三','四','五','六'];
+  function weekday(iso){ var p=iso.split('-'); return '星期'+WEEK[new Date(+p[0],p[1]-1,+p[2]).getDay()]; }
+  function daysTo(iso){ var p=iso.split('-'), t=new Date(); t.setHours(0,0,0,0);
+    return Math.round((new Date(+p[0],p[1]-1,+p[2]) - t)/86400000); }
+
+  // 併入 PDF 讀取結果（案件、決議、開會時間與地點）
+  var DETAILS = window.DETAILS || {};
+  var FT = {}, ftState = 'off';   // off | loading | on
+  DATA.forEach(function(m){
+    var d = DETAILS[m.id]; if (!d) return;
+    m.cases = d.cases || []; m.time = d.time; m.place = d.place; m.scan = d.scan;
+  });
+  window.__ft = function(obj){ Object.keys(obj).forEach(function(k){ FT[k] = obj[k].toLowerCase(); }); };
+  function loadFulltext(done){
+    var ys = window.FULLTEXT_YEARS || [], left = ys.length;
+    if (!left) { done(); return; }
+    ys.forEach(function(y){
+      var s = document.createElement('script'); s.src = 'text/' + y + '.js';
+      s.onload = s.onerror = function(){ if (--left === 0) done(); };
+      document.head.appendChild(s);
+    });
+  }
+  function snippet(m, words){
+    var t = FT[m.id]; if (!t || !words.length) return '';
+    var out = [];
+    words.forEach(function(w){
+      if (m._base.indexOf(w) >= 0) return;
+      var i = t.indexOf(w); if (i < 0) return;
+      out.push('…' + t.slice(Math.max(0, i - 40), i + w.length + 60) + '…');
+    });
+    return out.length ? '<p class="snip">全文：' + out.map(function(s){ return highlight(s, words); }).join('<br>') + '</p>' : '';
+  }
+
+  // 每筆會議建立搜尋用文字
+  DATA.forEach(function(m){
+    m._base = [m.rocDate, m.date, nameOf(m), m.title,
+      (m.agenda||[]).map(function(x){return x.label;}).join(' '),
+      (m.minutes||[]).map(function(x){return x.label;}).join(' '),
+      (m.cases||[]).map(function(c){return [c.name,c.resolution,(c.summary&&c.summary.outcome)||'',((c.summary&&c.summary.tags)||[]).join(' ')].join(' ');}).join(' ')
+    ].join(' ').toLowerCase();
+  });
+  function hay(m){ var n = notes[m.id];
+    return m._base + (n ? ' ' + ((n.tags||[]).join(' ') + ' ' + (n.note||'')).toLowerCase() : '') +
+      (ftState === 'on' && FT[m.id] ? ' ' + FT[m.id] : ''); }
+  // 同一案件的歷次審議：用「行政區＋地段＋第一個地號」當作案件代號
+  function caseKey(name){
+    var k = /([一-鿿]{1,4}區[一-鿿]{1,8}段(?:[一-鿿]{1,3}小段)?)([\d\-、]+?)地號/.exec(name || '');
+    return k ? k[1].replace(/^.*?市/, '') + k[2] + '地號' : '';
+  }
+  var HIST = {};
+  DATA.forEach(function(m){ (m.cases||[]).forEach(function(c){
+    var k = caseKey(c.name); if (!k) return;
+    (HIST[k] = HIST[k] || []).push({ m: m, c: c });
+  }); });
+  Object.keys(HIST).forEach(function(k){ HIST[k].sort(function(a,b){ return a.m.date < b.m.date ? -1 : 1; }); });
+
+  var OUTCLS = { '修正後通過':'ok', '通過':'ok', '同意':'ok', '予以確認':'ok', '洽悉':'ok', '續審':'hold', '順延':'hold', '維持原核定':'ok', '不同意':'no' };
+  function num(s){ return parseFloat(String(s).replace(/,/g,'')); }
+  function arrow(o, n){ var a = num(o), b = num(n); if (isNaN(a) || isNaN(b) || a === b) return '';
+    var pct = a ? ' ' + (Math.abs((b - a) / a * 100)).toFixed(1) + '%' : '';
+    return b > a ? '<span class="up">▲' + pct + '</span>' : '<span class="down">▼' + pct + '</span>'; }
+  function outBadge(c){ var o = c.summary && c.summary.outcome;
+    return o ? '<span class="out ' + (OUTCLS[o] || '') + '">' + esc(o) + '</span>' : ''; }
+
+  function summaryHtml(m, c, words){
+    var s = c.summary, h = '';
+    if (s){
+      if ((s.bonus||[]).length) h += '<div class="srow"><b>容獎</b><span>' +
+        (s.bonusTotal ? '<strong>核給合計 ' + esc(s.bonusTotal) + '%</strong>　' : '') +
+        s.bonus.map(function(b){
+          return '<span class="topic ' + (b.ok ? 'ok' : 'no') + '">' + highlight(b.label, words) +
+            (b.pct ? ' ' + esc(b.pct) + '%' : '') + (b.ok ? '' : ' 不予給予') + '</span>'; }).join('') +
+        (s.bonusMulti ? '<div class="fnote">決議列出多組容獎數字。這裡只顯示第一組，請看決議原文。</div>' : '') + '</span></div>';
+      if ((s.fees||[]).length){
+        var FV = { '同意':'ok', '確認':'ok', '調降':'no', '刪除':'no', '檢討':'hold' };
+        h += '<div class="srow"><b>費用</b><span>' + s.fees.map(function(f){
+          return '<span class="topic ' + (FV[f.v] || '') + '">' + highlight(f.label, words) + (f.pct ? ' ' + esc(f.pct) + '%' : '') + '｜' + esc(f.v) + '</span>'; }).join('') +
+          s.fees.filter(function(f){ return f.note; }).map(function(f){ return '<div class="fnote">' + highlight(f.note, words) + '…</div>'; }).join('') +
+          '</span></div>';
+      }
+      if (s.burden) h += '<div class="srow"><b>負擔</b><span>共同負擔比 ' + esc(s.burden) + '%' + (s.commit ? '（承諾 ' + esc(s.commit) + '%）' : '') + '</span></div>';
+      if ((s.changes||[]).length) h += '<div class="srow"><b>變化</b><span>' + s.changes.map(function(x){
+        return esc(x.label) + '：' + esc(x.old) + ' → <strong>' + esc(x.new) + '</strong> ' + esc(x.unit || '') + ' ' + arrow(x.old, x.new); }).join('<br>') + '</span></div>';
+    }
+    var k = caseKey(c.name), hs = k ? HIST[k] : null;
+    if (hs && hs.length > 1) h += '<div class="srow"><b>歷次</b><span>' + hs.map(function(x){
+      var me = x.m.id === m.id;
+      return '<span class="hist' + (me ? ' me' : '') + '" data-key="' + esc(k) + '">' + esc(x.m.rocDate) + ' ' +
+        (x.m.type === 'panel' ? '小組' : '審議會') + (parseInt(x.m.no,10) || '') + '次' +
+        (x.c.summary && x.c.summary.outcome ? '〔' + esc(x.c.summary.outcome) + '〕' : '') + '</span>'; }).join(' → ') + '</span></div>';
+    return h ? '<div class="sum">' + h + '</div>' : '';
+  }
+
+  function casesHtml(m, words, openAll){
+    if (!(m.cases||[]).length) return '';
+    return '<ol class="cases">' + m.cases.map(function(c){
+      var hit = words.length && c.resolution && words.some(function(w){ return c.resolution.toLowerCase().indexOf(w) >= 0; });
+      return '<li>' + (c.kind ? '<span class="kind">' + esc(c.kind) + '</span>' : '') + highlight(c.name||'', words) + ' ' + outBadge(c) +
+        (c.summary && (c.summary.tags||[]).length ? '<div class="kws">' + c.summary.tags.map(function(t){
+          return '<span class="kw" data-kw="' + esc(t) + '">' + highlight(t, words) + '</span>'; }).join('') + '</div>' : '') +
+        summaryHtml(m, c, words) +
+        (c.resolution ? '<details' + (hit || openAll ? ' open' : '') + '><summary>決議原文</summary><p>' + highlight(c.resolution, words) + '</p></details>' : '') + '</li>';
+    }).join('') + '</ol>';
+  }
+
+  // 下次會議
+  function renderNext(){
+    var today = localToday();
+    var future = DATA.filter(function(m){ return m.date >= today; }).sort(function(a,b){ return a.date < b.date ? -1 : 1; });
+    var h = '<h2>下一次會議</h2>';
+    if (future.length){
+      h += future.slice(0,3).map(function(m,i){
+        var d = daysTo(m.date);
+        return '<div class="row"><span class="'+(i? 'name':'big')+'">'+esc(m.rocDate)+'（'+weekday(m.date)+'）</span>'+
+          '<span>'+esc(nameOf(m))+'</span><span class="badge">'+(d===0?'今天':'還有 '+d+' 天')+'</span>'+
+          (m.agenda||[]).map(function(x){ return '<a href="'+esc(x.url)+'" target="_blank" rel="noopener">議程 PDF</a>'; }).join(' ')+'</div>'+
+          (m.time || m.place ? '<p>'+(m.time ? '時間：'+esc(m.time)+'。' : '')+(m.place ? '地點：'+esc(m.place)+'。' : '')+'</p>' : '')+
+          casesHtml(m, [], false);
+      }).join('');
+    } else {
+      var last = DATA[0];
+      h += '<div class="row"><span class="big">官方網站尚未公告</span></div>';
+      if (last) h += '<p>最近一次已公告的會議：'+esc(last.rocDate)+'（'+weekday(last.date)+'）'+esc(nameOf(last))+'。'+
+        (last.place ? '地點：'+esc(last.place)+'。' : '')+'</p>'+casesHtml(last, [], false);
+      h += '<p>官方網站公告新議程後，請再執行一次 fetch.ps1。</p>';
+    }
+    $('next').innerHTML = h;
+  }
+
+  function highlight(text, words){
+    var out = esc(text);
+    words.forEach(function(w){
+      if (!w) return;
+      var re = new RegExp(esc(w).replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'ig');
+      out = out.replace(re, function(x){ return '<mark>'+x+'</mark>'; });
+    });
+    return out;
+  }
+
+  function filtered(){
+    var words = $('q').value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    var type = $('type').value, year = $('year').value, state = $('state').value;
+    var kwv = $('kwsel').value, outv = $('outsel').value;
+    var rows = DATA.filter(function(m){
+      if (kwv || outv){
+        var okc = (m.cases||[]).some(function(c){ var s = c.summary || {};
+          return (!kwv || (s.tags||[]).indexOf(kwv) >= 0) && (!outv || s.outcome === outv); });
+        if (!okc) return false;
+      }
+      if (type && m.type !== type) return false;
+      if (year && m.date.slice(0,4) !== year) return false;
+      if (state === 'has' && !(m.minutes||[]).length) return false;
+      if (state === 'none' && (m.minutes||[]).length) return false;
+      if (state === 'mine'){ var n = notes[m.id]; if (!n || (!(n.tags||[]).length && !n.note)) return false; }
+      var h = hay(m);
+      return words.every(function(w){ return h.indexOf(w) >= 0; });
+    });
+    return { rows: rows, words: words };
+  }
+
+  function itemHtml(m, words){
+    var n = notes[m.id] || {};
+    var links = '';
+    (m.agenda||[]).forEach(function(x){ links += '<a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+highlight(tidy(x.label)||'議程', words)+'</a>'; });
+    (m.minutes||[]).forEach(function(x){ links += '<a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+highlight(tidy(x.label)||'會議紀錄', words)+'</a>'; });
+    var cases = casesHtml(m, words, false) + (m.scan ? '<p class="snip">會議紀錄是掃描檔，程式讀不到文字。</p>' : '') +
+      (ftState === 'on' ? snippet(m, words) : '');
+    var mine = '';
+    if ((n.tags||[]).length) mine += n.tags.map(function(t){ return '<span class="tag" data-tag="'+esc(t)+'">#'+highlight(t, words)+'</span>'; }).join('');
+    if (n.note) mine += '<p class="note">'+highlight(n.note, words)+'</p>';
+    return '<article class="item" data-id="'+esc(m.id)+'">'+
+      '<div class="head"><span class="date">'+highlight(m.rocDate, words)+'</span>'+
+      '<span class="name">'+highlight(nameOf(m), words)+'</span>'+
+      '<span class="badge '+(m.type==='panel'?'panel':'')+'">'+TYPE[m.type]+'</span>'+
+      ((m.minutes||[]).length ? '' : '<span class="badge wait">尚無會議紀錄</span>')+
+      '<button class="btn small" data-act="edit">標籤與備註</button></div>'+
+      '<div class="links">'+links+'</div>'+cases+
+      (mine ? '<div class="mine">'+mine+'</div>' : '')+
+      '<div class="edit"><label>標籤（用逗號分開）</label><input data-f="tags" value="'+esc((n.tags||[]).join('、'))+'">'+
+      '<label>備註（可貼上案件名稱與決議）</label><textarea data-f="note">'+esc(n.note||'')+'</textarea>'+
+      '<div><button class="btn" data-act="save">儲存</button> <button class="btn" data-act="cancel">取消</button></div></div>'+
+      '</article>';
+  }
+
+  function render(){
+    var f = filtered();
+    $('count').textContent = '共 ' + DATA.length + ' 筆。符合條件 ' + f.rows.length + ' 筆。';
+    $('list').innerHTML = f.rows.length
+      ? f.rows.slice(0, shown).map(function(m){ return itemHtml(m, f.words); }).join('')
+      : '<p class="empty">找不到符合條件的會議紀錄。</p>';
+    $('more').hidden = f.rows.length <= shown;
+  }
+  function reset(){ shown = PAGE; render(); }
+
+  // 年度選單
+  var years = {};
+  DATA.forEach(function(m){ years[m.date.slice(0,4)] = 1; });
+  Object.keys(years).sort().reverse().forEach(function(y){
+    var o = document.createElement('option'); o.value = y; o.textContent = (y-1911)+' 年'; $('year').appendChild(o); });
+
+  var timer;
+  $('q').addEventListener('input', function(){ clearTimeout(timer); timer = setTimeout(reset, 120); });
+  ['type','year','state','kwsel','outsel'].forEach(function(id){ $(id).addEventListener('change', reset); });
+  // 專有名詞與審議結果選單（附案件數）
+  var kwCount = {}, outCount = {};
+  DATA.forEach(function(m){ (m.cases||[]).forEach(function(c){ var s = c.summary || {};
+    (s.tags||[]).forEach(function(t){ kwCount[t] = (kwCount[t]||0) + 1; });
+    if (s.outcome) outCount[s.outcome] = (outCount[s.outcome]||0) + 1; }); });
+  [['kwsel', kwCount], ['outsel', outCount]].forEach(function(p){
+    Object.keys(p[1]).sort(function(a,b){ return p[1][b] - p[1][a]; }).forEach(function(t){
+      var o = document.createElement('option'); o.value = t; o.textContent = t + '（' + p[1][t] + '）'; $(p[0]).appendChild(o); }); });
+  $('more').addEventListener('click', function(){ shown += PAGE; render(); });
+  $('ft').addEventListener('change', function(){
+    var box = this;
+    if (!box.checked){ ftState = 'off'; reset(); return; }
+    if (Object.keys(FT).length){ ftState = 'on'; reset(); return; }
+    ftState = 'loading'; $('ftmsg').textContent = '正在載入全文…';
+    loadFulltext(function(){
+      ftState = 'on';
+      $('ftmsg').textContent = '已載入 ' + Object.keys(FT).length + ' 場會議的全文。';
+      reset();
+    });
+  });
+
+  $('list').addEventListener('click', function(e){
+    var kw = e.target.closest('.kw');
+    if (kw){ $('kwsel').value = kw.getAttribute('data-kw'); reset(); window.scrollTo(0,0); return; }
+    var hi = e.target.closest('.hist');
+    if (hi){ $('q').value = hi.getAttribute('data-key'); reset(); window.scrollTo(0,0); return; }
+    var tag = e.target.closest('.tag');
+    if (tag){ $('q').value = tag.getAttribute('data-tag'); reset(); window.scrollTo(0,0); return; }
+    var b = e.target.closest('[data-act]'); if (!b) return;
+    var item = b.closest('.item'), id = item.getAttribute('data-id'), act = b.getAttribute('data-act');
+    if (act === 'edit'){ item.classList.toggle('editing'); return; }
+    if (act === 'cancel'){ render(); return; }
+    if (act === 'save'){
+      var tags = item.querySelector('[data-f=tags]').value.split(/[,，、;；]+/).map(function(s){ return s.trim().replace(/^#/,''); }).filter(Boolean);
+      var note = item.querySelector('[data-f=note]').value.trim();
+      if (tags.length || note) notes[id] = { tags: tags, note: note }; else delete notes[id];
+      saveNotes(); render();
+    }
+  });
+
+  $('export').addEventListener('click', function(){
+    var blob = new Blob([JSON.stringify(notes, null, 2)], { type:'application/json' });
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = '都更審議會備註_' + localToday() + '.json'; a.click();
+  });
+  $('import').addEventListener('click', function(){ $('file').click(); });
+  $('file').addEventListener('change', function(){
+    var f = this.files[0]; if (!f) return;
+    var r = new FileReader();
+    r.onload = function(){
+      try {
+        var obj = JSON.parse(r.result), n = 0;
+        Object.keys(obj).forEach(function(k){ notes[k] = obj[k]; n++; });
+        saveNotes(); render(); alert('已匯入 ' + n + ' 筆備註。');
+      } catch(e){ alert('檔案格式不正確。'); }
+    };
+    r.readAsText(f); this.value = '';
+  });
+
+  $('fetched').textContent = window.FETCHED_AT || '尚未抓取';
+  renderNext(); render();
+})();
+</script>
+</body>
+</html>
